@@ -1,11 +1,11 @@
-import axios, { type AxiosResponse } from "axios";
+import axios from "axios";
 import {Command} from 'commander';
 import {type LuaDef,type  OuterDefinition,type Definition } from "./utils";
 
-const fetchDefs = async (wd:string, desiredValue:string):LuaDef => {
+const fetchDefs = async (wd:string, desiredValue:string):Promise<LuaDef> => {
 	let response = await axios.get('https://api.dictionaryapi.dev/api/v2/entries/en/' + wd)
 		.then((data)=>{return data.data[0].meanings})
-		.catch((err)=>console.error(err));
+		.catch((err)=>console.log("No definitions found for " + wd));
 	let defs:string[] = [];
 	response.forEach((def:OuterDefinition) => {
 		if(desiredValue == 'syn'){
@@ -47,10 +47,9 @@ async function main(){
 	if(!word){
 		console.error('Please enter a word');
 		program.help();
-		return
 	}	
-	const syn:LuaDef = options.syn ? await fetchDefs(word,'syn') : null;
-	const def:LuaDef = options.def ? await fetchDefs(word,'def') : null;
+	const syn:LuaDef|null = options.syn ? await fetchDefs(word,'syn') : null;
+	const def:LuaDef|null = options.def ? await fetchDefs(word,'def') : null;
 
 	if(syn){
 		console.log(constructLuaOutput(syn));
