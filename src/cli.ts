@@ -5,7 +5,7 @@ import {type LuaDef,type  OuterDefinition,type Definition } from "./utils";
 const fetchDefs = async (wd:string, desiredValue:string):Promise<LuaDef> => {
 	let response = await axios.get('https://api.dictionaryapi.dev/api/v2/entries/en/' + wd)
 		.then((data)=>{return data.data[0].meanings})
-		.catch((err)=>console.log("No definitions found for " + wd));
+		.catch((err)=>console.log("No definitions found for " + wd, err));
 	let defs:string[] = [];
 	response.forEach((def:OuterDefinition) => {
 		if(desiredValue == 'syn'){
@@ -37,7 +37,7 @@ const program:Command = new Command();
 program.name('dictionary-api-call')
 	.description(`A CLI program for calling either the synonym or definition to render in NeoVim
 							 |Options| -s --syn (synonyms) -d --def (definitions)
-									Example: cli.ts -s 'fallohide'`)
+									Example: cli.ts -s 'serendipity'`)
 	.option('-d, --def <word>')
 	.option('-s, --syn <word>')
 	.parse(process.argv)
