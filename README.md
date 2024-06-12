@@ -11,6 +11,7 @@ This project is easily built with bun.
 bun init
 
 ## bun will add the necessary node modules
+
 ## It will populate the directory with a index.ts file, you can remove it with the following command
 rm index.ts
 ```
@@ -28,10 +29,14 @@ following to your NeoVim config:
 local function makeCall(opt, wd)
 	local cmd = '~/.config/nvim/after/plugin/txtfiles/dict-api --'..opt..' "'..wd..'"'
 	local handle = io.popen(cmd)
-	if handle == nil then 
-		return error("error in makeCall")
+	if handle == nil then
+		return error("error in making call")
 	end
 	local result = handle:read("*a")
+	if result == nil then
+		print("error in call")
+		return 
+	end
 	handle:close()
 	return result --returns a string '{word = <wd>, definition = <definition>}'
 end
