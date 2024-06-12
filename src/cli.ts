@@ -41,6 +41,7 @@ program.name('dictionary-api-call')
 	.option('-d, --def <word>')
 	.option('-s, --syn <word>')
 	.parse(process.argv)
+
 async function main(){
 	const options = program.opts();
 	const word = options.syn || options.def;
@@ -60,5 +61,11 @@ async function main(){
 	}
 }
 
-main();
+//main();
 
+async function printF(){
+	const data = await fetchDefs('serendipity','syn')
+	console.log(data);
+}
+
+printF();
